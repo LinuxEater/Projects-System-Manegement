@@ -1,0 +1,53 @@
+{% extends 'core/base.html' %}
+
+{% block title %}Clients - Freelance Manager{% endblock %}
+
+{% block content %}
+<div class="container mx-auto px-4 py-8">
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-4xl font-bold text-gray-800">My Clients</h1>
+        <a href="{% url 'client_create' %}" class="btn btn-primary"><i class="fas fa-plus"></i> Add Client</a>
+    </div>
+
+    <div class="bg-white p-6 rounded-lg shadow-lg">
+        {% if clients %}
+        <div class="overflow-x-auto">
+            <table class="min-w-full bg-white">
+                <thead>
+                    <tr>
+                        <th class="py-2 px-4 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Image</th>
+                        <th class="py-2 px-4 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Name</th>
+                        <th class="py-2 px-4 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Email</th>
+                        <th class="py-2 px-4 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Phone</th>
+                        <th class="py-2 px-4 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for client in clients %}
+                    <tr class="hover:bg-gray-50">
+                        <td class="py-2 px-4 border-b border-gray-200">
+                            {% if client.image %}
+                                <img src="{{ client.image.url }}" alt="{{ client.name }}" class="w-10 h-10 rounded-full object-cover">
+                            {% else %}
+                                <i class="fas fa-user-circle text-gray-400 text-3xl"></i>
+                            {% endif %}
+                        </td>
+                        <td class="py-2 px-4 border-b border-gray-200">{{ client.name }}</td>
+                        <td class="py-2 px-4 border-b border-gray-200">{{ client.email }}</td>
+                        <td class="py-2 px-4 border-b border-gray-200">{{ client.phone|default:"N/A" }}</td>
+                        <td class="py-2 px-4 border-b border-gray-200">
+                            <a href="{% url 'client_projects' client.id %}" class="text-green-600 hover:text-green-900 mr-3"><i class="fas fa-folder-open"></i> Projects</a>
+                            <a href="{% url 'client_edit' client.id %}" class="text-blue-600 hover:text-blue-900 mr-3"><i class="fas fa-edit"></i> Edit</a>
+                            <a href="{% url 'client_delete' client.id %}" class="text-red-600 hover:text-red-900"><i class="fas fa-trash-alt"></i> Delete</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-center text-gray-500 text-xl">No clients found. <a href="{% url 'client_create' %}" class="text-blue-500 hover:underline">Add your first client</a>.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
